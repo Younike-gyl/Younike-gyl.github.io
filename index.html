@@ -1,358 +1,356 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Younike 数据看板</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Younike 项目导航</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
-      background: #f0f2f5;
-      color: #303133;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
+html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
 
-    /* ========== 左侧导航 ========== */
-    .sidebar {
-      width: 260px;
-      min-width: 260px;
-      background: #fff;
-      border-right: 1px solid #e8e8e8;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 2px 0 8px rgba(0,0,0,.04);
-      z-index: 10;
-    }
+/* ===== 整体布局 ===== */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
 
-    .sb-header {
-      padding: 20px 16px 12px;
-      border-bottom: 1px solid #f0f0f0;
-    }
+/* ===== 左侧导航栏 ===== */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  background: #1e1e2d;
+  color: #a2a3b7;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  user-select: none;
+}
 
-    .sb-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 16px; font-weight: 700; color: #303133;
-    }
-    .sb-logo .dot {
-      width: 28px; height: 28px; border-radius: 6px;
-      background: linear-gradient(135deg, #5b8cf9, #9f6bf0);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 14px;
-    }
+/* 侧边栏头部 */
+.sidebar-header {
+  padding: 20px 20px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #2b2b40;
+}
 
-    .sb-tabs {
-      display: flex; gap: 4px; margin-top: 16px;
-    }
-    .sb-tab {
-      flex: 1; text-align: center; padding: 6px 0; border-radius: 6px;
-      font-size: 12px; color: #999; cursor: pointer; border: 1px solid transparent;
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-    }
-    .sb-tab.active {
-      background: linear-gradient(135deg, #5b8cf9, #9f6bf0);
-      color: #fff; border-color: transparent;
-    }
+.sidebar-header .logo {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
 
-    .sb-nav {
-      flex: 1; overflow-y: auto; padding: 8px 0;
-    }
+.sidebar-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
 
-    .nav-group { margin-bottom: 2px; }
-    .nav-group-title {
-      display: flex; align-items: center; gap: 8px;
-      padding: 10px 20px; font-size: 13px; font-weight: 600;
-      color: #303133; cursor: pointer; user-select: none;
-    }
-    .nav-group-title:hover { background: #f5f5f5; }
-    .nav-group-title .arrow {
-      font-size: 10px; transition: transform .2s; color: #999;
-    }
-    .nav-group.open .nav-group-title .arrow { transform: rotate(90deg); }
+/* 导航分组 */
+.nav-group {
+  border-bottom: 1px solid #2b2b40;
+}
 
-    .nav-items { display: none; }
-    .nav-group.open .nav-items { display: block; }
+.nav-group-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8a8b9f;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.15s;
+  gap: 8px;
+}
 
-    .nav-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 9px 20px 9px 42px; font-size: 13px; color: #606266;
-      cursor: pointer; text-decoration: none; transition: all .15s;
-      border-left: 3px solid transparent;
-    }
-    .nav-item:hover { background: #f0f2ff; color: #5b8cf9; }
-    .nav-item.active {
-      background: #eef0ff; color: #5b8cf9; font-weight: 600;
-      border-left-color: #5b8cf9;
-    }
-    .nav-item .dot-indicator {
-      width: 6px; height: 6px; border-radius: 50%; background: #c0c4cc;
-    }
-    .nav-item.active .dot-indicator { background: #5b8cf9; }
+.nav-group-header:hover {
+  color: #c0c1d4;
+}
 
-    .sb-footer {
-      padding: 12px 20px; border-top: 1px solid #f0f0f0;
-      font-size: 11px; color: #bbb; text-align: center;
-    }
+.nav-group-header .arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
 
-    /* ========== 右侧主区域 ========== */
-    .main {
-      flex: 1; display: flex; flex-direction: column; overflow: hidden;
-    }
+.nav-group.collapsed .nav-group-header .arrow {
+  transform: rotate(-90deg);
+}
 
-    .toolbar {
-      height: 48px; min-height: 48px; background: #fff;
-      border-bottom: 1px solid #e8e8e8;
-      display: flex; align-items: center; padding: 0 20px; gap: 12px;
-    }
-    .toolbar .tb-icon {
-      width: 32px; height: 32px; display: flex; align-items: center;
-      justify-content: center; border-radius: 6px; color: #999; cursor: pointer;
-    }
-    .toolbar .tb-icon:hover { background: #f5f5f5; color: #606266; }
-    .toolbar .tb-breadcrumb { font-size: 13px; color: #999; }
-    .toolbar .tb-breadcrumb span { color: #303133; }
+.nav-group.collapsed .nav-items {
+  display: none;
+}
 
-    .content {
-      flex: 1; overflow-y: auto; padding: 24px;
-    }
+/* 导航项 */
+.nav-items {
+  list-style: none;
+  padding: 0 0 8px;
+}
 
-    /* ========== 内容卡片 ========== */
-    .section-title {
-      font-size: 15px; font-weight: 600; color: #303133;
-      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
-    }
-    .section-title::before {
-      content: ''; width: 3px; height: 16px; border-radius: 2px;
-      background: linear-gradient(135deg, #5b8cf9, #9f6bf0);
-    }
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px 10px 36px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #a2a3b7;
+  transition: all 0.15s;
+  gap: 10px;
+  border-left: 3px solid transparent;
+}
 
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-    }
+.nav-item:hover {
+  background: #1b1b28;
+  color: #d0d1e0;
+}
 
-    .card {
-      background: #fff; border-radius: 10px; padding: 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06); transition: all .25s;
-      border: 1px solid #eee; cursor: pointer; text-decoration: none;
-      color: inherit; display: block;
-    }
-    .card:hover {
-      box-shadow: 0 4px 20px rgba(91,140,249,.12);
-      border-color: #d0d8ff;
-      transform: translateY(-2px);
-    }
+.nav-item.active {
+  background: #1b1b28;
+  color: #ffffff;
+  border-left-color: #667eea;
+}
 
-    .card-header {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .card-icon {
-      width: 42px; height: 42px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-    }
-    .card-icon.blue { background: #edf2ff; color: #5b8cf9; }
-    .card-icon.green { background: #e8f8f0; color: #34d399; }
-    .card-icon.orange { background: #fff3e8; color: #fb923c; }
-    .card-icon.purple { background: #f3edff; color: #9f6bf0; }
+.nav-item .item-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
 
-    .card-status {
-      font-size: 11px; padding: 2px 8px; border-radius: 10px;
-      background: #f0fdf4; color: #16a34a;
-    }
+.nav-item .item-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-    .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-    .card p { font-size: 13px; color: #909399; line-height: 1.6; }
+.nav-item .item-badge {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(102, 126, 234, 0.2);
+  color: #667eea;
+  white-space: nowrap;
+}
 
-    .card-meta {
-      margin-top: 16px; display: flex; gap: 16px; font-size: 12px; color: #c0c4cc;
-    }
-    .card-meta span { display: flex; align-items: center; gap: 4px; }
+/* 侧边栏底部 */
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px;
+  font-size: 12px;
+  color: #5a5b72;
+  border-top: 1px solid #2b2b40;
+  text-align: center;
+}
 
-    /* ========== 详情视图 ========== */
-    .detail-view { display: none; }
-    .detail-view.active { display: block; }
+/* ===== 右侧内容区 ===== */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f5f6fa;
+}
 
-    .detail-header {
-      background: #fff; border-radius: 10px; padding: 28px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06); border: 1px solid #eee;
-      margin-bottom: 20px;
-    }
-    .detail-header h2 { font-size: 22px; margin-bottom: 8px; }
-    .detail-header .dh-desc { color: #909399; font-size: 14px; margin-bottom: 20px; }
-    .detail-header .btn-open {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 10px 24px; border-radius: 8px;
-      background: linear-gradient(135deg, #5b8cf9, #9f6bf0);
-      color: #fff; font-size: 14px; text-decoration: none;
-      font-weight: 600; transition: all .2s;
-    }
-    .detail-header .btn-open:hover { opacity: .9; transform: translateY(-1px); }
+/* 顶部标题栏 */
+.top-bar {
+  height: 48px;
+  min-height: 48px;
+  background: #ffffff;
+  border-bottom: 1px solid #e8e8ee;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 12px;
+  z-index: 10;
+}
 
-    .detail-stats {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      background: #fff; border-radius: 10px; padding: 20px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06); border: 1px solid #eee;
-    }
-    .stat-card .stat-val { font-size: 28px; font-weight: 700; color: #303133; }
-    .stat-card .stat-lbl { font-size: 13px; color: #909399; margin-top: 4px; }
+.top-bar .breadcrumb {
+  font-size: 14px;
+  color: #555770;
+}
 
-    /* ========== 空状态 ========== */
-    .empty-state {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; height: 60vh; color: #c0c4cc;
-    }
-    .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .5; }
-    .empty-state p { font-size: 14px; }
+.top-bar .breadcrumb span {
+  color: #a0a1b2;
+  margin: 0 6px;
+}
 
-    /* ========== Toast ========== */
-    .toast {
-      position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-      background: #303133; color: #fff; padding: 10px 24px; border-radius: 8px;
-      font-size: 13px; z-index: 999; opacity: 0; transition: opacity .3s;
-    }
-    .toast.show { opacity: 1; }
-  </style>
+.top-bar .breadcrumb .current {
+  color: #1e1e2d;
+  font-weight: 500;
+}
+
+/* iframe 容器 */
+.iframe-container {
+  flex: 1;
+  position: relative;
+  background: #fff;
+}
+
+.iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* 空状态 */
+.empty-state {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #c0c1d4;
+}
+
+.empty-state .empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 14px;
+}
+</style>
 </head>
 <body>
 
-<!-- ========== 左侧导航 ========== -->
-<aside class="sidebar">
-  <div class="sb-header">
-    <div class="sb-logo"><span class="dot">Y</span> Younike 数据看板</div>
-    <div class="sb-tabs">
-      <div class="sb-tab active">📂 列表视图</div>
-      <div class="sb-tab">⭐ 收藏</div>
-    </div>
-  </div>
+<div class="app-container">
 
-  <nav class="sb-nav">
-    <div class="nav-group open">
-      <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-        <span class="arrow">▶</span>📁 生产管理
-      </div>
-      <div class="nav-items">
-        <a class="nav-item active" data-view="fqc" onclick="switchView('fqc', this)">
-          <span class="dot-indicator"></span> FQC 人员配置预测
-        </a>
-      </div>
+  <!-- 左侧导航栏 -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">Y</div>
+      <h2>Younike 导航</h2>
     </div>
 
-    <div class="nav-group">
-      <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-        <span class="arrow">▶</span>📁 更多工具
+    <!-- 生产管理分组 -->
+    <div class="nav-group" id="navGroup1">
+      <div class="nav-group-header" onclick="toggleGroup('navGroup1')">
+        <span class="arrow">▼</span>
+        <span>生产管理</span>
       </div>
-      <div class="nav-items">
-        <div class="nav-item" style="color:#c0c4cc;cursor:default">
-          <span class="dot-indicator"></span> 敬请期待
-        </div>
-      </div>
+      <ul class="nav-items">
+        <li class="nav-item active"
+            onclick="switchProject(this, 'fqc', 'https://younike-gyl.github.io/fqc-staffing/', 'FQC 人员配置预测', '生产管理')">
+          <span class="item-icon">📊</span>
+          <span class="item-label">FQC 人员配置预测</span>
+        </li>
+      </ul>
     </div>
-  </nav>
 
-  <div class="sb-footer">Powered by GitHub Pages · © 2026 Younike</div>
-</aside>
+    <!-- 更多分组可在此添加 -->
+    <!--
+    <div class="nav-group collapsed" id="navGroup2">
+      <div class="nav-group-header" onclick="toggleGroup('navGroup2')">
+        <span class="arrow">▼</span>
+        <span>质量体系</span>
+      </div>
+      <ul class="nav-items">
+        <li class="nav-item" onclick="switchProject(this, 'qa', 'https://example.com/qa/', '质量管理看板', '质量体系')">
+          <span class="item-icon">✅</span>
+          <span class="item-label">质量管理看板</span>
+        </li>
+      </ul>
+    </div>
+    -->
 
-<!-- ========== 右侧主区域 ========== -->
-<div class="main">
-  <div class="toolbar">
-    <div class="tb-icon" onclick="switchView('home')" style="cursor:pointer">🏠</div>
-    <div class="tb-breadcrumb">/ <span id="breadcrumb">项目总览</span></div>
-  </div>
+    <div class="sidebar-footer">Younike Project Hub</div>
+  </aside>
 
-  <div class="content" id="content-area">
-
-    <!-- 项目总览 -->
-    <div id="view-home" class="detail-view active">
-      <div class="section-title">项目总览</div>
-
-      <div class="card-grid">
-        <a class="card" onclick="switchView('fqc')">
-          <div class="card-header">
-            <div class="card-icon blue">👥</div>
-            <div class="card-status">运行中</div>
-          </div>
-          <h3>FQC 人员配置预测</h3>
-          <p>根据品质数据和销售预测，自动计算质检环节所需正式工与临时工人数，支持安全系数调节、产能数据导入与日级排班。</p>
-          <div class="card-meta">
-            <span>📅 2026-07-23</span>
-            <span>🔗 younike-gyl.github.io</span>
-          </div>
-        </a>
+  <!-- 右侧内容区 -->
+  <main class="main-area">
+    <div class="top-bar">
+      <div class="breadcrumb" id="breadcrumb">
+        <span id="breadGroup">生产管理</span>
+        <span>/</span>
+        <span class="current" id="breadProject">FQC 人员配置预测</span>
       </div>
     </div>
 
-    <!-- FQC 详情 -->
-    <div id="view-fqc" class="detail-view">
-      <div class="detail-header">
-        <h2>FQC 人员配置预测</h2>
-        <p class="dh-desc">
-          导入品质绩效表与销量预测数据，系统自动计算正式工 / 临时工需求人数，
-          生成日级排班表与趋势曲线，辅助排班决策。
-        </p>
-        <a class="btn-open" href="https://younike-gyl.github.io/fqc-staffing/" target="_blank">
-          🔗 打开项目
-        </a>
-      </div>
-
-      <div class="detail-stats">
-        <div class="stat-card">
-          <div class="stat-val">v6</div>
-          <div class="stat-lbl">当前版本</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val">6</div>
-          <div class="stat-lbl">迭代次数</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val">1×</div>
-          <div class="stat-lbl">安全系数默认</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val">产能</div>
-          <div class="stat-lbl">核心算法</div>
-        </div>
-      </div>
+    <div class="iframe-container" id="iframeContainer">
+      <iframe id="contentFrame"
+              src="https://younike-gyl.github.io/fqc-staffing/"
+              title="项目内容"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+              allowfullscreen>
+      </iframe>
     </div>
+  </main>
 
-    <!-- 空状态 -->
-    <div id="view-empty" class="detail-view">
-      <div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <p>这里的内容尚未生成</p>
-      </div>
-    </div>
-
-  </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-  function switchView(view, navEl) {
-    document.querySelectorAll('.detail-view').forEach(v => v.classList.remove('active'));
-    const target = document.getElementById('view-' + view);
-    if (target) target.classList.add('active');
-    else document.getElementById('view-empty').classList.add('active');
+// 当前激活的项目信息
+const state = {
+  activeNavItem: document.querySelector('.nav-item.active'),
+  activeProjectId: 'fqc',
+  iframeUrl: 'https://younike-gyl.github.io/fqc-staffing/'
+};
 
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    if (navEl) navEl.classList.add('active');
-
-    const labels = { home: '项目总览', fqc: 'FQC 人员配置预测' };
-    document.getElementById('breadcrumb').textContent = labels[view] || '项目总览';
-
-    if (view === 'home') {
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    }
+// 项目配置列表（未来添加新项目时在这里注册）
+const projects = {
+  'fqc': {
+    url: 'https://younike-gyl.github.io/fqc-staffing/',
+    name: 'FQC 人员配置预测',
+    group: '生产管理'
   }
+  // 未来添加示例:
+  // 'qa': {
+  //   url: 'https://example.com/qa-dashboard/',
+  //   name: '质量管理看板',
+  //   group: '质量体系'
+  // }
+};
+
+// 切换分组折叠
+function toggleGroup(groupId) {
+  const group = document.getElementById(groupId);
+  group.classList.toggle('collapsed');
+}
+
+// 切换项目
+function switchProject(el, projectId, url, name, group) {
+  if (state.activeNavItem === el) return;
+
+  // 取消上一个高亮
+  if (state.activeNavItem) {
+    state.activeNavItem.classList.remove('active');
+  }
+
+  // 设置新高亮
+  el.classList.add('active');
+  state.activeNavItem = el;
+  state.activeProjectId = projectId;
+
+  // 更新面包屑
+  document.getElementById('breadGroup').textContent = group;
+  document.getElementById('breadProject').textContent = name;
+
+  // 切换 iframe
+  document.getElementById('contentFrame').src = url;
+  state.iframeUrl = url;
+
+  // 更新 document title
+  document.title = name + ' - Younike 项目导航';
+}
 </script>
 
 </body>
