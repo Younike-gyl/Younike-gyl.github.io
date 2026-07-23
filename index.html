@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Younike 项目导航</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      min-height: 100vh;
+      color: #e0e0e0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .header .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .header .subtitle {
+      color: #888;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      backdrop-filter: blur(10px);
+    }
+
+    .project-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(102, 126, 234, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .project-card .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .project-card .icon.blue { background: rgba(102, 126, 234, 0.2); }
+    .project-card .icon.green { background: rgba(52, 211, 153, 0.2); }
+    .project-card .icon.orange { background: rgba(251, 146, 60, 0.2); }
+    .project-card .icon.purple { background: rgba(167, 139, 250, 0.2); }
+
+    .project-card h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f0f0f0;
+    }
+
+    .project-card p {
+      font-size: 14px;
+      color: #999;
+      line-height: 1.6;
+    }
+
+    .project-card .tags {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .project-card .tag {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(102, 126, 234, 0.15);
+      color: #a78bfa;
+    }
+
+    .project-card .tag.green-tag { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      color: #555;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="avatar">📐</div>
+      <h1>Younike 项目导航</h1>
+      <p class="subtitle">自制工具集 · 持续更新中</p>
+    </div>
+
+    <div class="projects">
+      <a href="https://younike-gyl.github.io/fqc-staffing/" class="project-card" target="_blank">
+        <div class="icon blue">👥</div>
+        <h2>FQC 人员配置预测</h2>
+        <p>
+          根据品质数据和收货计划，自动计算质检环节所需正式工与临时工人数。
+          支持安全系数调节、产能数据导入。
+        </p>
+        <div class="tags">
+          <span class="tag">生产管理</span>
+          <span class="tag green-tag">自动化</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="footer">
+      Powered by GitHub Pages · © 2026 Younike
+    </div>
+  </div>
+</body>
+</html>
